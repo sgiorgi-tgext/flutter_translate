@@ -31,13 +31,13 @@ class LocaleFileService
 
     static Future<List<String>> _getAllLocaleFiles(String basePath) async
     {
-        final manifest = await rootBundle.loadString(Constants.assetManifestFilename);
+        final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
 
-        Map<String, dynamic> map = jsonDecode(manifest);
+        final allAssets = manifest.listAssets();
 
         var separator = basePath.endsWith('/') ? '' : '/';
 
-        return map.keys.where((x) => x.startsWith('$basePath$separator')).toList();
+        return allAssets.where((asset) => asset.startsWith('$basePath$separator')).toList();
     }
 
     static String _findLocaleFile(String languageCode, List<String> localizedFiles, String basePath)
